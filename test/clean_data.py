@@ -35,18 +35,15 @@ def nan2num_samp(CTG_features, extra_feature):
     """
     c_cdf = {}
     # ------------------ IMPLEMENT YOUR CODE HERE:------------------------------
-    CTG_features_temp = CTG_features.copy()
-    CTG_features_temp.drop(columns=[extra_feature], inplace=True)
-    for column in CTG_features_temp.columns:
-        col = pd.to_numeric(CTG_features_temp[column], errors='coerce')  # turn non numeric values to nan
+    CTG_features.drop(columns=[extra_feature], inplace=True)
+    for column in CTG_features.columns:
+        col = pd.to_numeric(CTG_features[column], errors='coerce')  # turn non numeric values to nan
         i = col.isnull()  # create a boolean vector with true values where col has nan values
-        #idx = pd.Series([])  # initialize an index vector to save nan locations
-        idx = np.zeros(np.sum(i))
-        t = 0  # initialize a counter for the nan locations vector (idx)
+        idx = pd.Series([])  # initialize an index vector to save nan locations
+        t = 1  # initialize a counter for the nan locations vector (idx)
         for j in range(1, len(i)+1):
             if i[j] == 1:
-                #idx = idx.set_value(t, j)
-                idx[t] = j
+                idx = idx.set_value(t, j)
                 t += 1
         temp = np.random.choice(col, size=len(idx))  # random sampling of len(idx) values from col
         col[idx] = temp
